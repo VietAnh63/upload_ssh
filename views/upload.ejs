@@ -1,0 +1,110 @@
+<html>
+<header>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+      <style>
+            #student_form {
+                  display: inline-block;
+            }
+
+            #video_region {
+                  display: inline-block;
+            }
+      </style>
+      <script>
+            $(document).ready(function () {
+                  // Grab elements, create settings, etc.
+                  var video = document.getElementById('video');
+
+                  // Get access to the camera!
+                  navigator.mediaDevices.getUserMedia({ video: true }).then(function (stream) {
+                        video.srcObject = stream;
+                        video.play();
+
+                  })
+
+                  function draw(v, c, w, h) {
+                        if (v.paused || v.ended) return false;
+                        c.drawImage(v, 0, 0, w, h);
+                        setTimeout(draw, 20, v, c, w, h);
+                  }
+
+
+                  // Elements for taking the snapshot
+                  var canvas = document.getElementById('canvas');
+                  var context = canvas.getContext('2d');
+                  var video = document.getElementById('video');
+
+                  // Trigger photo take
+                  document.getElementById("video").addEventListener("play", function () {
+                        draw(video, context, 640, 480)
+                  });
+
+                  document.getElementById("snap").addEventListener('click', function () {
+                        video.pause()
+                  })
+            })
+
+            function submitForm() {
+                  var formData = new FormData()
+                  formData.append("student_name", $("#student_name").val())
+                  formData.append("student_id", $("#student_id").val())
+
+                  var array = []
+                  var canvas = document.getElementById("canvas")
+                  var dataURL = canvas.toDataURL().split(",")[1]
+                  var blobBin = atob(dataURL)
+
+                  for (var i = 0; i < blobBin.length; i++) {
+                        array.push(blobBin.charCodeAt(i))
+                  }
+
+                  var blob = new Blob([new Uint8Array(array)], { type: 'img/jpg' })
+
+                  formData.append("img", blob)
+
+                  $.ajax({
+                        url: '/process_form',
+                        type: 'POST',
+                        async: true,
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                              alert("Success!")
+                        }
+                  })
+            }
+      </script>
+</header>
+<h1>Student form</h1>
+<form action='/process_form' id='student_form' method='POST'>
+      <table>
+            <tr>
+                  <td>
+                        <label for='code'>Student ID</label>
+                        <input type='text' id='student_id' />
+                  </td>
+            </tr>
+
+            <tr>
+                  <td>
+                        <label for='name'>Student name</label>
+                        <input type='text' id='student_name' />
+                  </td>
+            </tr>
+
+            <tr>
+                  <td>
+                        <button type='button' id="snap">Snap Photo</button>
+                        <button type='button' onclick="submitForm()" id='submit'>Submit</button>
+                  </td>
+            </tr>
+      </table>
+</form>
+
+<div id='video_region'>
+      <video hidden id="video" width="640" height="480" autoplay=""></video>
+      <canvas id="canvas" width="640" height="480"></canvas>
+</div>
+
+</html>
