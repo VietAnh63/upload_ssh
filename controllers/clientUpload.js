@@ -1,5 +1,6 @@
 const fs = require("fs");
 const formidable = require("formidable");
+const scp = require("node-scp")
 
 module.exports.upload = function (req, res, next) {
   return res.render("upload");
@@ -23,6 +24,9 @@ module.exports.postImage = function (req, res, next) {
 
 				fs.rename(oldpath, newpath, function(err){
 					if(err) { throw err; }
+
+					// if the file has been uploaded successfully
+					// scp the whole folder to the server
 				})
 			})
 		})
