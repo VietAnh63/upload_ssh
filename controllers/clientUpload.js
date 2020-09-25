@@ -27,6 +27,19 @@ module.exports.postImage = function (req, res, next) {
 
 					// if the file has been uploaded successfully
 					// scp the whole folder to the server
+					
+					var server_upload_dir = '/home/pi/Desktop/Hieu/files' // upload location at the file server
+					scp({
+						host : '192.168.86.26', // change with your server's ip
+						port : 22,
+						username : 'pi', // change with your server's username
+						password : 'raspberry' // change with the server's password
+					}).then(client => {
+						client.uploadDir(`./public/uploads/${folder}`, `${server_upload_dir}/${folder}`)
+									.then(response => {
+										client.close() // important, always close client ssh tunnel
+									}).catch(err => {})
+					})
 				})
 			})
 		})
