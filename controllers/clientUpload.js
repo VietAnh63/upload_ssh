@@ -8,17 +8,25 @@ module.exports.upload = function (req, res, next) {
 module.exports.postImage = function (req, res, next) {
   var form = formidable.IncomingForm();
   form.parse(req, function (err, fields, files) {
-    // Uploading file
-    var oldpath = files.img.path;
-    var newpath = "./public/uploads/" + fields.student_name + ".jpg";
+		// create the folder for the student
+		var folder = fields.student_id
+		fs.mkdir(`./public/uploads/${folder}`, function(err){
+			// if err 
+			if(err) { throw err ;}
 
-    console.log(newpath);
+			// if folder created successfully
+			// upload all files to that folder
+			var fileKey = Object.keys(files);
+			fileKey.forEach(function(key){
+				var oldpath = files[key].path
+				var newpath = `./public/uploads/${folder}/` + fields.student_name + "_" + key + ".jpg"
 
-    fs.rename(oldpath, newpath, function (err) {
-      if (err) {
-        throw err;
-      }
-    });
-    res.send("success");
+				fs.rename(oldpath, newpath, function(err){
+					if(err) { throw err; }
+				})
+			})
+		})
+
+		res.send("success");
   });
 };
