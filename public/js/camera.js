@@ -6,6 +6,10 @@ $(document).ready(function () {
 
 			// Get access to the camera!
 			$("#myBtn").click(function(){
+				images = []
+				$("#info").empty()
+				$("#snaped-photo-region").empty()
+
 				navigator.mediaDevices.getUserMedia({ video: true }).then(function (stream) {
 					video.srcObject = stream;
 					video.play();
@@ -33,22 +37,37 @@ $(document).ready(function () {
 
 					draw(video, context, 640, 480)
 				});
+			})
 
-				document.getElementById("snap").addEventListener('click', function () {
-						var array = []
-						var canvas = document.getElementById("canvas")
-						var dataURL = canvas.toDataURL().split(",")[1]
-						var blobBin = atob(dataURL)
+			document.getElementById("snap").addEventListener('click', function () {
+					var array = []
+					var canvas = document.getElementById("canvas")
+					var dataURL = canvas.toDataURL().split(",")[1]
+					var blobBin = atob(dataURL)
 
-						for (var i = 0; i < blobBin.length; i++) {
-									array.push(blobBin.charCodeAt(i))
-						}
+					for (var i = 0; i < blobBin.length; i++) {
+								array.push(blobBin.charCodeAt(i))
+					}
 
-						var blob = new Blob([new Uint8Array(array)], { type: 'img/jpg' })
-						images.push(blob)
-					
-						$("#info").html(`Number of photo taken : ${images.length}`)
-				})
+					var blob = new Blob([new Uint8Array(array)], { type: 'img/jpg' })
+					images.push(blob)
+
+					// create a new canvas and append to image region
+					if(images.length <= 5){
+						$("<canvas>")
+							.attr("id", "img_" + images.length)
+							.css("display", "inline-block")
+							.css("width", "20%")
+							.css("height", "auto")
+							.appendTo("#snaped-photo-region")
+
+						var canvas = document.getElementById("img_" + images.length)
+						canvas.getContext('2d').drawImage(video, 0,0, video.width, video.height,
+							0, 0, canvas.width, canvas.height	
+						)
+					}
+
+					$("#info").html(`Number of photo taken : ${images.length}`)
 			})
 
 			function draw(v, c, w, h) {
