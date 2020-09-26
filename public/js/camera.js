@@ -6,6 +6,8 @@ $(document).ready(function () {
 
 			// Get access to the camera!
 			$("#myBtn").click(function(){
+				// Clear image buffer and info 
+				// When user closes the modal and opens it again
 				images = []
 				$("#info").empty()
 				$("#snaped-photo-region").empty()
