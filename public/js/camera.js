@@ -59,8 +59,8 @@ $(document).ready(function () {
 						$("<canvas>")
 							.attr("id", "img_" + images.length)
 							.css("display", "inline-block")
-							.css("width", "20%")
-							.css("height", "auto")
+							.css("width", "15vw")
+							.css("height", "15vw")
 							.appendTo("#snaped-photo-region")
 
 						var canvas = document.getElementById("img_" + images.length)
@@ -98,6 +98,8 @@ $(document).ready(function () {
 										images = []
 										$("#snaped-photo-region").empty()
 										$("#info").empty()
+
+										$("#student_form input").val('')
 
 										console.log(response)
 										if(response == 'success'){
