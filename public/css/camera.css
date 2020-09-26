@@ -1,5 +1,10 @@
 #student_form {
 			display: inline-block;
+			width : 100%;
+}
+
+#snaped-photo-region {
+	width : 100%;
 }
 
 #video_region {

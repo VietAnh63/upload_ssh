@@ -80,10 +80,6 @@ $(document).ready(function () {
 
 			$("#submit").click(function() {
 						// Clear all data
-						images = []
-						$("#snaped-photo-region").empty()
-						$("#info").empty()
-		
 						formData.append("student_name", $("#student_name").val())
 						formData.append("student_id", $("#student_id").val())
 
@@ -99,7 +95,18 @@ $(document).ready(function () {
 									contentType: false,
 									processData: false,
 									success: function (response) {
-												alert("Success!")
+										images = []
+										$("#snaped-photo-region").empty()
+										$("#info").empty()
+
+										console.log(response)
+										if(response == 'success'){
+											alert('Files uploaded successfully')
+										}else if(response == 'id_exist'){
+											alert('Student ID exists')
+										}else{
+											alert('Failed to upload files to server')
+										}
 									}
 						})
 			})
