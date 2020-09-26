@@ -42,12 +42,12 @@ module.exports.postImage = function (req, res, next) {
 					// scp the whole folder to the server
 				
 					console.log("[INFO] SCP to file server")
-					var server_upload_dir = '/home/anhpv/hauiface/folder_image' // upload location at the file server
+					var server_upload_dir = '<file_server_upload_folder>' // upload location at the file server
 					await scp({
-						host : '103.140.38.24', // change with your server's ip
+						host : '<server_ip>', // change with your server's ip
 						port : 2112,
-						username : 'anhpv', // change with your server's username
-						password : 'chienthang1984' // change with the server's password
+						username : '<server_username>', // change with your server's username
+						password : '<server_password>' // change with the server's password
 					}).then(client => {
 						client.uploadDir(`./public/uploads/${folder}`, `${server_upload_dir}/${folder}`)
 							.then(response => {
