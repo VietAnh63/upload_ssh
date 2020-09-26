@@ -79,6 +79,11 @@ $(document).ready(function () {
 			}
 
 			$("#submit").click(function() {
+						// Clear all data
+						images = []
+						$("#snaped-photo-region").empty()
+						$("#info").empty()
+		
 						formData.append("student_name", $("#student_name").val())
 						formData.append("student_id", $("#student_id").val())
 
