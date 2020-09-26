@@ -104,6 +104,8 @@ $(document).ready(function () {
 											alert('Files uploaded successfully')
 										}else if(response == 'id_exist'){
 											alert('Student ID exists')
+										}else if(response == 'server_failed'){
+											alert('File server failed')
 										}else{
 											alert('Failed to upload files to server')
 										}
